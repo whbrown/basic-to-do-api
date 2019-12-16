@@ -1,8 +1,9 @@
-const express = require("express");
-const router = express.Router();
-const Task = require("../models/task");
+const express = require('express');
 
-router.get("/tasks", async (req, res, next) => {
+const router = express.Router();
+const Task = require('../models/task');
+
+router.get('/tasks', async (req, res, next) => {
   try {
     const tasks = await Task.find().sort({ createdAt: -1 });
 
@@ -12,17 +13,17 @@ router.get("/tasks", async (req, res, next) => {
   }
 });
 
-router.post("/tasks/create", async (req, res, next) => {
+router.post('/tasks/create', async (req, res, next) => {
   if (!req.user) {
     return res.json({
-      message: "sorry, you must be logged in to create a task"
+      message: 'sorry, you must be logged in to create a task',
     });
   }
   try {
     const task = await Task.create({
       title: req.body.title,
       description: req.body.description,
-      owner: req.user._id
+      owner: req.user._id,
     });
 
     res.json(task);
@@ -31,7 +32,7 @@ router.post("/tasks/create", async (req, res, next) => {
   }
 });
 
-router.post("/tasks/edit/:id", async (req, res, next) => {
+router.post('/tasks/edit/:id', async (req, res, next) => {
   try {
     const task = await Task.findByIdAndUpdate(req.params.id, req.body);
 
@@ -41,7 +42,7 @@ router.post("/tasks/edit/:id", async (req, res, next) => {
   }
 });
 
-router.post("/tasks/delete/:id", async (req, res, next) => {
+router.post('/tasks/delete/:id', async (req, res, next) => {
   try {
     const task = await Task.findByIdAndRemove(req.params.id);
 
